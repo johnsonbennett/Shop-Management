@@ -2,8 +2,7 @@
 
 #include <iostream>
 #include <map>
-#include <limits>
-#include "LinkedList.cpp"
+//#include "LinkedList.cpp"
 #include <fstream>
 using namespace std;
 
@@ -11,11 +10,31 @@ double point_setup();
 void reward_setup();
 map <int, double> reward_map;
 double reward_redeem(double total, int point_rate, map <int , double>reward_map);
-//double shopping();
+void shopping();
 
-//double shopping(){
-    
-//}
+void shopping(){
+    string product_id;
+    string end_prompt = "N";
+    string product;
+    double total;
+    map <string,string>product_list;
+    fstream product_file;
+    product_file.open("Product.txt");
+    while(!product_file.eof()){
+        getline(product_file,product);
+        cout << product << endl;
+        list = product.split(" ");
+        product_list.insert(pair <string,string> (list[0],list[2]));
+
+    }
+    while(end_prompt == "N"){
+        cout << "Enter product ID you want to purchase: ";
+        cin >> product_id;
+        if()
+        cout << "Checkout (Y/N):";
+        cin >> end_prompt;
+    }
+}
 
 double point_setup() //This function asks the manager to set amount for a point
 {
@@ -34,13 +53,13 @@ double point_setup() //This function asks the manager to set amount for a point
 
 void reward_setup()  //Sets up how the reward should be done
 {
-
     int point_thresh;
     char thres_prompt = 'Y';
     double gift;
     bool duplicate = false;
     
-    while(thres_prompt == 'Y' || duplicate == true) {
+    while(thres_prompt == 'Y' || duplicate == true) 
+    {
         cout << "Set no of points required for rewards: ";
         cin >> point_thresh;
         
@@ -48,20 +67,15 @@ void reward_setup()  //Sets up how the reward should be done
         {
             cout << "Amount cannot be less than $0\nTry again: ";
             cin >> point_thresh;
-            
-            
         }
         
         cout << "Set the rewards amount: $";
         cin >> gift;
         
-        
         while(gift < 0.00)
         {
             cout << "Gift cannot be less than $0\nTry again: ";
             cin >> gift;
-            
-            
         }
         if(reward_map.find(point_thresh) == reward_map.end()){
             reward_map.insert(pair<int,double>(point_thresh,gift));
@@ -73,10 +87,6 @@ void reward_setup()  //Sets up how the reward should be done
         cout << "Do you want to add another limit(Y/N):";
         cin >> thres_prompt;
     }
-        
-        
-    
-
 }
 
 //This function does the actual computation of the rewards
@@ -105,6 +115,7 @@ int main(){
     double total = 500.00;
     double rate = point_setup();
     reward_setup();
+    shopping();
     double reward = reward_redeem(total,rate,reward_map);
     cout << "Total reward gift: $"<<reward << '\n';
 
