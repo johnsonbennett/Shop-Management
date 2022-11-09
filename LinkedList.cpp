@@ -69,17 +69,19 @@ void printList()
 	while (ptr != NULL)
 	{
 		cout << ptr->id << " ";
+		cout << ptr->name << " ";
+		cout << ptr->price << endl;
 		ptr = ptr->next;
 	}
 
 	cout << endl;
 }
 
-int main() {
-	insert("P12345", "ABC", 12.99, 4);
-	insert("P22345", "ABC", 12.99, 4);
-	insert("P32345", "ABC", 12.99, 4);
-	printList();
-	deleteID("P22345");
-	printList();
-}
+//int main() {
+//	insert("P12345", "ABC", 12.99, 4);
+//	insert("P22345", "ABC", 12.99, 4);
+//	insert("P32345", "ABC", 12.99, 4);
+//	printList();
+//	deleteID("P22345");
+//	printList();
+//}
