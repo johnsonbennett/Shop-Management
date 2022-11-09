@@ -1,7 +1,9 @@
 #include <iostream>
+#include <fstream>
 using namespace std;
 
 //Node Structure for linked list
+
 struct node {
 	string id;
 	string name;
@@ -14,7 +16,9 @@ struct node *head = NULL; //A global variable for the head of the linked list
 
 //A function to insert new nodes into the linked list
 void insert(string id, string name, double price, int onHand) {
-	struct node *newNode = new struct node;
+	fstream product_file;
+	product_file.open("Product.txt",ios::app); //Opens a file called Product.txt which stores the
+	struct node *newNode = new struct node;	   //information from the struct 
 	newNode->id = id;
 	newNode->name = name;
 	newNode->price = price;
@@ -22,6 +26,10 @@ void insert(string id, string name, double price, int onHand) {
 
 	newNode->next = head;
 	head = newNode;
+	product_file << newNode ->id << " ";
+	product_file << newNode->name << " ";
+	product_file << newNode->price << "\n";
+	product_file.close();
 }
 
 //A function to delete items with a certain ID number
