@@ -1,40 +1,64 @@
-//Written by Bennett Johnson. This file introduces functions for rewards and shopping
+//This file introduces functions for rewards and shopping
 
 #include <iostream>
 #include <map>
-//#include "LinkedList.cpp"
+#include <vector>
 #include <fstream>
+#include <sstream>
 using namespace std;
 
 double point_setup();
 void reward_setup();
 map <int, double> reward_map;
 double reward_redeem(double total, int point_rate, map <int , double>reward_map);
-void shopping();
+double shopping();
 
-void shopping(){
+double shopping(){
     string product_id;
     string end_prompt = "N";
     string product;
-    double total;
-    map <string,string>product_list;
+    string token;
+    double total = 0;
+    const char  delimiter = ' ';
+    map <string,double>product_list;
+    
     fstream product_file;
     product_file.open("Product.txt");
+    fstream transaction;
+    transaction.open("transaction.txt",ios::app);
     while(!product_file.eof()){
         getline(product_file,product);
-        cout << product << endl;
-        list = product.split(" ");
-        product_list.insert(pair <string,string> (list[0],list[2]));
-
+        cout << product<<endl;
+        stringstream ss;
+        ss << product;
+        vector <string>list;
+        while(getline(ss,token,delimiter)) {
+            list.push_back(token);
+        }
+        if (list.empty() || list.size() < 3) continue;
+        product_list.insert(pair<string, double> (list[0],stod(list[2])));
     }
+    product_file.close();
     while(end_prompt == "N"){
         cout << "Enter product ID you want to purchase: ";
         cin >> product_id;
-        if()
+        if(product_list.find(product_id) == product_list.end()){
+            cout << "ID not found!\n";
+        }
+        else{
+            transaction << "Product: "<<product_id <<"\n";
+            double value = product_list.at(product_id);
+            total += value;
+        }
+        cout << "Total: $"<<total<<endl;
         cout << "Checkout (Y/N):";
         cin >> end_prompt;
     }
+    transaction <<"Total: $" <<to_string(total)<<"\n\n";
+    transaction.close();
+    return total;
 }
+
 
 double point_setup() //This function asks the manager to set amount for a point
 {
@@ -93,36 +117,24 @@ void reward_setup()  //Sets up how the reward should be done
 
 double reward_redeem(double total,int point_rate, map <int , double>reward_map) //Does the actual reward computation
 {
-    double reward;
+    double reward = 0;
     int points = total / point_rate; //This gives us the no of points accumilated from the given total
-    cout << points << '\n';
-    for (auto i = reward_map.begin(); i != reward_map.end();i++)
-    {
-        if(points < (*i).first){
-            if(i == reward_map.begin()){
-                reward = 0;
-            }
-            else
-                reward = (*i--).second; 
-        }
-        else{
-            //Does nothing
+    for (auto elem : reward_map) {
+        // cout << elem.first << ", " << elem.second << std::endl;
+        if (points >= elem.first) {
+            reward = elem.second;
         }
     }
+
     return reward;
 }
 int main(){
-    double total = 500.00;
+    double total = shopping();
     double rate = point_setup();
     reward_setup();
-    shopping();
     double reward = reward_redeem(total,rate,reward_map);
+    cout << "Your total: $"<<total <<endl;
     cout << "Total reward gift: $"<<reward << '\n';
 
     return 0;
 }
-
-
-
-
-
