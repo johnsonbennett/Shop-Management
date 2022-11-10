@@ -28,6 +28,7 @@ bool Allalphabets(string s) {
     }
 }
 
+
 bool isNumeric(string str) {
     for (int i = 0; i < str.length(); i++)
         if (isdigit(str[i]) == false)
