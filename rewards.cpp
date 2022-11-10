@@ -10,27 +10,23 @@ using namespace std;
 double point_setup();
 void reward_setup();
 map <int, double> reward_map;
+map <string, double>product_list;
 double reward_redeem(double total, int point_rate, map <int , double>reward_map);
-double shopping();
+map <string,double> product_ready();
+double shopping(map <string,double>product_list);
 
-double shopping(){
-    string product_id;
-    string end_prompt = "N";
+
+map <string, double> product_ready(){ //This function takes products from the file and put it to a map
     string product;
     string token;
-    double total = 0;
     const char  delimiter = ' ';
-    map <string,double>product_list;
-    
     fstream product_file;
     product_file.open("Product.txt");
-    fstream transaction;
-    transaction.open("transaction.txt",ios::app);
     while(!product_file.eof()){
         getline(product_file,product);
-        cout << product<<endl;
+        cout << product<<"\n";
         stringstream ss;
-        ss << product;
+        ss << product;        //Converted product into a string buffer since getline only works on buffers
         vector <string>list;
         while(getline(ss,token,delimiter)) {
             list.push_back(token);
@@ -39,6 +35,15 @@ double shopping(){
         product_list.insert(pair<string, double> (list[0],stod(list[2])));
     }
     product_file.close();
+    return product_list;
+}
+
+
+double shopping(map<string,double>product_list){
+    string end_prompt = "N";
+    string product_id;
+    double total = 0;
+    fstream transaction;
     while(end_prompt == "N"){
         cout << "Enter product ID you want to purchase: ";
         cin >> product_id;
@@ -46,6 +51,7 @@ double shopping(){
             cout << "ID not found!\n";
         }
         else{
+            transaction.open("transaction.txt",ios::app);
             transaction << "Product: "<<product_id <<"\n";
             double value = product_list.at(product_id);
             total += value;
@@ -54,7 +60,7 @@ double shopping(){
         cout << "Checkout (Y/N):";
         cin >> end_prompt;
     }
-    transaction <<"Total: $" <<to_string(total)<<"\n\n";
+    transaction << "Total: $" <<to_string(total)<<"\n\n";
     transaction.close();
     return total;
 }
@@ -120,7 +126,6 @@ double reward_redeem(double total,int point_rate, map <int , double>reward_map) 
     double reward = 0;
     int points = total / point_rate; //This gives us the no of points accumilated from the given total
     for (auto elem : reward_map) {
-        // cout << elem.first << ", " << elem.second << std::endl;
         if (points >= elem.first) {
             reward = elem.second;
         }
@@ -129,7 +134,8 @@ double reward_redeem(double total,int point_rate, map <int , double>reward_map) 
     return reward;
 }
 int main(){
-    double total = shopping();
+    product_ready();
+    double total = shopping(product_list);
     double rate = point_setup();
     reward_setup();
     double reward = reward_redeem(total,rate,reward_map);
