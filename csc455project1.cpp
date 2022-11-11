@@ -3,6 +3,38 @@
 #include<string>
 using namespace std;
 
+bool isValidUserName(string uName) {
+    if (uName.length() > 11)
+        return false;
+    else
+    {
+        int countAlpha = 0, countDigit = 0;
+        for (int i = 0; i < uName.length(); i++)
+        {
+            if (!(isalpha(uName[i])))
+                return false;
+            else
+            {
+                countAlpha++;
+                if (countAlpha > 8)
+                    return false;
+            }
+        }
+        reverse(uName.begin(), uName.end());
+        for (int i = 0; i < uName.length(); i++)
+        {
+            if (isdigit(uName[i]))
+            {
+                countDigit++;
+                if (countDigit > 3)
+                    return false;
+            }
+        }
+        return true;
+
+    }
+}
+
 bool ValidLength(string s, int i) {
     if (s.size() <= i) {
         return true;
@@ -24,7 +56,7 @@ bool Allalphabets(string s) {
 
         }
 
-    
+
     }
 }
 
@@ -38,10 +70,19 @@ bool isNumeric(string str) {
 
 
 int main() {
-    string firstName, lastName, Input;
+    string username,firstName, lastName, Input;
     string date, month, year;
     int Cnumber = 1;
-    ofstream file("customers.txt");
+    ofstream file("customerReg.txt");
+    for (;;) {
+        cout << "enter username: ";
+        cin >> Input;
+        username = Input;
+        if (isValidUserName(Input)) {
+            file << "customer " << Cnumber << " " << "Username : " << Input << endl;
+            break;
+        }
+    }
 
     for (;;) {
         cout << "First Name: ";
@@ -64,38 +105,6 @@ int main() {
             break;
         }
     }
-    file << "customer " << Cnumber << " " << "date of birth : ";
 
-    cout << "enter DOB:";
-    cin >> date;
- 
-
-        while (cin.get() != '-')
-        {
-            cout << "expected  '-' \n";
-            cout << "enter full date......[ MM-DD-YYYY],";
-            cin >> date;
-        }
-            cout << "enter month";
-        cin >> month;
-        while (cin.get() != '-')
-        {
-                cout << "expected  '-' \n";
-                cout << "enter full date......[ MM-DD-YYYY],";
-                cin >> month;
-        }
-        cout << "enter year";
-        cin >> year;
-        file << " " << date << "-" << month << "-" << year << endl;
-
-        file <<"customer "<<Cnumber<<" " << "credt card details : " << endl;
-    
 }
-
-
-
-
-
-
-
 
