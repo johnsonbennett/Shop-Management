@@ -76,20 +76,29 @@ bool Allalphabets(string s) {
     }
 }
 
-bool isNumeric(string str, int num) {
-    for (int i = 0; i < str.length(); i++)
+bool isNumeric(string str, int num, int digit, string str1) {
+    int count = 0;
+    for (int i = 0; i < str.length(); i++) {
         if (isdigit(str[i]) == false) {
             cout << "input should contain  only numbers, try again... \n";
             return false; //when one non numeric value is found, return false
         }
         else {}
-    if (!(str.length() == num)) {
-        cout << "enter full format of input, try again.... \n";
+        if (!(str.length() == num)) {
+            cout << "input should be in specified format, try again.... \n";
+            return false;
+        }
+        else {}
+    }
+    for (int j = 0; j < str1.length(); j++) {
+        if (str1[j] == '-')
+            count++;
+    }
+    if (!(count == digit)) {
+        cout << "characters '-' should be in format as asked, try again.... " << endl;
         return false;
     }
     else {}
-
-
     return true;
 }
 
@@ -136,11 +145,11 @@ void dates() {
     string dob,DOB;
     fstream file("customer.txt", ios::in | ios::out | ios::app);
     for (;;) {
-        cout << "enter date: ";
+        cout << "enter date (MM-DD-YYYY) : ";
         cin >> dob;
         DOB = dob;
         dob.erase(remove(dob.begin(), dob.end(), '-'), dob.end());
-        if (isNumeric(dob,8)) {
+        if (isNumeric(dob,8,2,DOB)) {
             file << "customer DOB: " << DOB << endl;
             break;
         }
@@ -152,11 +161,11 @@ void cards()
 {
     string Carddetails,CD;
     for (;;) {
-        cout << "enter Credit Card details: ";
+        cout << "enter Credit Card details (XXXX-XXXX-XXXX) : ";
         cin >> Carddetails;
         CD = Carddetails;
         Carddetails.erase(remove(Carddetails.begin(), Carddetails.end(), '-'), Carddetails.end());
-        if (isNumeric(Carddetails,12)) {
+        if (isNumeric(Carddetails,12,2,CD)) {
             break;
         }
   
@@ -194,3 +203,5 @@ int main() {
     rewards();
     return 0;
 }
+   
+
