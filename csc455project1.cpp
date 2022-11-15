@@ -68,11 +68,7 @@ bool Allalphabets(string s) {
             cout << "Name cannot contain any number and special characters,enter again... " << endl;
             return false;
         }
-        else {
-
-        }
-
-
+        else {}
     }
 }
 
@@ -113,7 +109,9 @@ auto getName() {
            file << "customer " << "Username : " << username << endl;
             break;
         }
+        else {}
     }
+
 
     for (;;) {
         cout << "First Name: ";
@@ -122,9 +120,8 @@ auto getName() {
             file << "customer " << "First name : " << firstName << endl;
             break;
         }
+        else {}
     }
-
-
 
     for (;;) {
         cout << "Last Name: ";
@@ -133,10 +130,9 @@ auto getName() {
             file << "customer " << "last name : " << lastName << endl;
             break;
         }
-        
+        else {}
     }
     file.close();
-   
 }
 
 
@@ -153,6 +149,7 @@ void dates() {
             file << "customer DOB: " << DOB << endl;
             break;
         }
+        else {}
     }
     file.close();
 }
@@ -168,7 +165,7 @@ void cards()
         if (isNumeric(Carddetails,12,2,CD)) {
             break;
         }
-  
+        else {}
     }
 }
 
@@ -203,5 +200,3 @@ int main() {
     rewards();
     return 0;
 }
-   
-
