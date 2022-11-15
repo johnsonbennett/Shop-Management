@@ -41,7 +41,7 @@ int main()
     case 5:
       {
       map <string,double>list = product_ready();
-      double total = shopping(product_list,trans_id);
+      double total = shopping(list,trans_id);
       }
       break;
       
