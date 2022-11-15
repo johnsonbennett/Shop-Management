@@ -37,11 +37,7 @@ bool isValidUserName(string uName) {
         }
 
     }
-    if (countAlpha > 8 && countDigit > 3) {
-        cout << "username cannot contain more than 8 characters and 3 numbers, try again....." << endl;
-        return false;
-    }
-    else {}
+
     if (!(countAlpha == 8 && countDigit == 3)) {
         cout << "username should contain atleast 8 characters followed by 3 numbers" << endl;
         return false;
@@ -106,7 +102,7 @@ auto getName() {
         cout << "enter username: ";
         cin >> username;
         if (isValidUserName(username) && validateUsername(username)) {
-           file << "customer " << "Username : " << username << endl;
+            file << "customer " << "Username : " << username << endl;
             break;
         }
         else {}
@@ -138,14 +134,14 @@ auto getName() {
 
 
 void dates() {
-    string dob,DOB;
+    string dob, DOB;
     fstream file("customer.txt", ios::in | ios::out | ios::app);
     for (;;) {
         cout << "enter date (MM-DD-YYYY) : ";
         cin >> dob;
         DOB = dob;
         dob.erase(remove(dob.begin(), dob.end(), '-'), dob.end());
-        if (isNumeric(dob,8,2,DOB)) {
+        if (isNumeric(dob, 8, 2, DOB)) {
             file << "customer DOB: " << DOB << endl;
             break;
         }
@@ -156,13 +152,13 @@ void dates() {
 
 void cards()
 {
-    string Carddetails,CD;
+    string Carddetails, CD;
     for (;;) {
         cout << "enter Credit Card details (XXXX-XXXX-XXXX) : ";
         cin >> Carddetails;
         CD = Carddetails;
         Carddetails.erase(remove(Carddetails.begin(), Carddetails.end(), '-'), Carddetails.end());
-        if (isNumeric(Carddetails,12,2,CD)) {
+        if (isNumeric(Carddetails, 12, 2, CD)) {
             break;
         }
         else {}
@@ -171,15 +167,15 @@ void cards()
 
 void RandomNumber() {
     fstream file("customer.txt", ios::in | ios::out | ios::app);
-   // ofstream file("customer.txt");
-    // Providing a seed value
+    // ofstream file("customer.txt");
+     // Providing a seed value
     srand((unsigned)time(NULL));
 
     // Get a random number
     int random = rand();
     random = random + 10000000000;
     // Print the random number
-    file << "customer ID: " <<"CID"<< random << endl;
+    file << "customer ID: " << "CID" << random << endl;
     file.close();
 }
 void rewards() {
@@ -187,7 +183,7 @@ void rewards() {
     fstream file("customer.txt", ios::in | ios::out | ios::app);
     cout << "enter reward points:";
     cin >> rewardpoints;
-    file << "Customer total reward points: " << rewardpoints<< endl;
+    file << "Customer total reward points: " << rewardpoints << endl;
     file << "              " << endl;
     file.close();
 }
@@ -200,4 +196,3 @@ int main() {
     rewards();
     return 0;
 }
-
