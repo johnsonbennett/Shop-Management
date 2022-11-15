@@ -1,4 +1,5 @@
 #include <iostream>
+#include "rewards.cpp"
 using namespace std;
 
 int main()
@@ -38,7 +39,8 @@ int main()
       break;
 
     case 5:
-      // Shopping code
+      product_ready();
+      double total = shopping(product_list,trans_id);
       break;
 
     case 6:
@@ -46,7 +48,11 @@ int main()
       break;
 
     case 7:
-      // Redeem Rewards code
+      double rate = point_setup();
+      reward_setup();
+      auto result = reward_redeem(rate,reward_map);
+      cout << "You have "<< result.point <<"points \n";
+      cout << "You redeemed $" <<result.rewards<<endl;
       break;
     default:
       cout << "Exiting the application...." << endl;
