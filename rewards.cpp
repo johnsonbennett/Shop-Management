@@ -11,9 +11,15 @@ double point_setup();
 void reward_setup();
 map <int, double> reward_map;
 map <string, double>product_list;
-double reward_redeem(double total, int point_rate, map <int , double>reward_map);
+struct retvalue reward_redeem(int point_rate, map <int , double>reward_map);
 map <string,double> product_ready();
 double shopping(map <string,double>product_list);
+double read_files(string file_name,string key_word);
+
+struct retvalue{
+        int point;
+        double rewards; 
+    };
 
 
 map <string, double> product_ready(){ //This function takes products from the file and put it to a map
@@ -38,12 +44,35 @@ map <string, double> product_ready(){ //This function takes products from the fi
     return product_list;
 }
 
+double read_files(string filename, string key_word){        //This function is used to read line by line looking for a key word
+    fstream file;
+    file.open(filename);
+    string lines;
+    double t =0;
+    const char delimiter = ':';
+    while(!file.eof()){
+        getline(file,lines);
+        if(lines.find(key_word) != std::string::npos){  //find returns -1 if not found, used it to avoid -1
+            vector <string> line;
+            string val;
+            stringstream ss(lines);
+            while(getline(ss,val,delimiter)){
+                line.push_back(val);
+            }
+            t += stod(line[1]);
+        }
+        else{
+            //Do nothing
+        }   
+    }
+    return t;
+}
 
-double shopping(map<string,double>product_list){
+double shopping(map<string,double>product_list,int trans_id){
     string end_prompt = "N";
     string product_id;
+    vector <string>product;
     double total = 0;
-    fstream transaction;
     while(end_prompt == "N"){
         cout << "Enter product ID you want to purchase: ";
         cin >> product_id;
@@ -51,8 +80,7 @@ double shopping(map<string,double>product_list){
             cout << "ID not found!\n";
         }
         else{
-            transaction.open("transaction.txt",ios::app);
-            transaction << "Product: "<<product_id <<"\n";
+            product.push_back(product_id);
             double value = product_list.at(product_id);
             total += value;
         }
@@ -60,8 +88,22 @@ double shopping(map<string,double>product_list){
         cout << "Checkout (Y/N):";
         cin >> end_prompt;
     }
-    transaction << "Total: $" <<to_string(total)<<"\n\n";
-    transaction.close();
+    if(total > 0){
+        trans_id++;
+        fstream transaction;
+        transaction.open("transaction.txt",ios::app);
+        transaction <<"Transaction ID: " << trans_id <<"\n";
+        transaction << "Products: ";
+        size_t size = product.size();
+        for (int i =0; i < size; i++)
+            transaction << product[i]<<" ";
+        transaction << "\nTotal: " <<total;
+        transaction <<"\n\n";
+        transaction.close();
+    }
+    else{
+        //Do nothing
+    }
     return total;
 }
 
@@ -121,26 +163,19 @@ void reward_setup()  //Sets up how the reward should be done
 
 //This function does the actual computation of the rewards
 
-double reward_redeem(double total,int point_rate, map <int , double>reward_map) //Does the actual reward computation
+struct retvalue reward_redeem(int point_rate, map <int , double>reward_map) //Does the actual reward computation
 {
     double reward = 0;
+    double total = read_files("transaction.txt","Total");
     int points = total / point_rate; //This gives us the no of points accumilated from the given total
     for (auto elem : reward_map) {
         if (points >= elem.first) {
             reward = elem.second;
         }
     }
-
-    return reward;
+    
+    return retvalue{points,reward};
 }
-int main(){
-    product_ready();
-    double total = shopping(product_list);
-    double rate = point_setup();
-    reward_setup();
-    double reward = reward_redeem(total,rate,reward_map);
-    cout << "Your total: $"<<total <<endl;
-    cout << "Total reward gift: $"<<reward << '\n';
-
-    return 0;
-}
+   
+        
+        
