@@ -39,20 +39,25 @@ int main()
       break;
 
     case 5:
-      product_ready();
+      {
+      map <string,double>list = product_ready();
       double total = shopping(product_list,trans_id);
+      }
       break;
+      
 
     case 6:
       // view customer using customer ID code
       break;
 
     case 7:
+      {
       double rate = point_setup();
       reward_setup();
       auto result = reward_redeem(rate,reward_map);
       cout << "You have "<< result.point <<"points \n";
       cout << "You redeemed $" <<result.rewards<<endl;
+      }
       break;
     default:
       cout << "Exiting the application...." << endl;
