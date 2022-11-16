@@ -8,6 +8,7 @@ struct node* head = NULL; //A global variable for the head of the linked list
 
 int main()
 {
+    readProductFile();
     int i = 0;
     while (i >= 0 && i < 8)
     {
