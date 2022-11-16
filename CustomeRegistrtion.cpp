@@ -5,22 +5,6 @@
 #include <sstream>
 using namespace std;
 
-
-bool validateUsername(string Name) {
-    int count = 0;
-    for (int i = 0; i <= Name.length(); i++) {
-        if ((isalpha(Name[i])))
-            count++;
-    }
-    if (count < 8) {
-        cout << "input should contain atleast 8 characters in sequence, try again...." << endl;
-        return false;
-    }
-    else
-        return true;
-}
-
-
 bool isValidUserName(string uName) {
     int countAlpha = 0, countDigit = 0;
     if (uName.length() < 11) {
@@ -131,7 +115,10 @@ void getName() {
             file << "customer " << "Username : " << username << endl;
             break;
         }
-        else {}
+        else {
+            cout << "Invalid username!\n";
+            break;
+        }
     }
 
     for (;;) {
