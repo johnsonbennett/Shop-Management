@@ -15,6 +15,14 @@ bool isValidUserName(string uName) {
     }
     else
     {
+        for(int i =0 ;i < 8; i++){
+            if(isdigit(uName[i])){
+                cout << "First 8 characters cannot not be numbers\n";
+                return false;
+            }
+            else{}
+        }
+        
         for (int i = 0; i < uName.length(); i++)
         {
             if ((isalpha(uName[i])))
@@ -25,9 +33,8 @@ bool isValidUserName(string uName) {
             else {}
         }
     }
-
     if (!(countAlpha >= 8 && countDigit <= 3)) {
-        cout << "username should contain atleast 8 characters followed by 3 numbers" << endl;
+        cout << "username should contain atleast 8 characters followed by atmost 3 numbers" << endl;
         return false;
     }
     else 
@@ -82,15 +89,30 @@ bool isNumeric(string str, int num, int digit, string str1) {
     else {}
     return true;
 }
+bool find_id(string id){
+    fstream file("customer.txt");
+    string lines;
+    while(!file.eof()){
+        getline(file,lines);
+        if(lines.find(id) != std::string::npos)
+            return 1;
+        else {
+            //Do nothing
+        }
+    }
+    return 0;
+}
 
-
-auto getName() {
+void getName() {
     string username, firstName, lastName;
     fstream file("customer.txt", ios::in | ios::out | ios::app);
     for (;;) {
         cout << "enter username: ";
         cin >> username;
-        if (isValidUserName(username)) {
+        if(find_id(username)){
+            cout << "username already exist!\n";
+        }
+        else if (isValidUserName(username)) {
             file << "customer " << "Username : " << username << endl;
             break;
         }
@@ -121,7 +143,8 @@ auto getName() {
 
 
 
-void dates() {
+void dates()
+{
     string dob;
     fstream file("customer.txt", ios::in | ios::out | ios::app);
     for (;;) {
@@ -200,20 +223,6 @@ void RandomNumber() {
     // Print the random number
     file << "customer ID: CID" << random << endl;
     file.close();
-}
-
-bool find_id(string id){
-    fstream file("customer.txt");
-    string lines;
-    while(!file.eof()){
-        getline(file,lines);
-        if(lines.find(id) != std::string::npos)
-            return 1;
-        else {
-            //Do nothing
-        }
-    }
-    return 0;
 }
 
 void show_customer(string id){
