@@ -49,34 +49,35 @@ double read_files(string filename, string key_word_1,string key_word_2){
     string lines;
     double t =0;
     const char delimiter = ':';
-    string line_2;
-    string key_user;
+    string line;
+    string val;
     while(!file.eof()){
         getline(file,lines);
         if(lines.find(key_word_1) != std::string::npos){
-            stringstream s(line_2);
-            getline(s,key_user);
-            if(keyuser.find(key_word_2) != std::string::npos)
+            getline(file,lines);
+            while(lines.find(key_word_1) != std::string::npos)
             {
-            vector <string> line;
-            string val;
-            stringstream ss(lines);
-            while(getline(ss,val,delimiter)){
-                line.push_back(val);
-            }
-            t += stod(line[1]);
-            }
-            else{
-                //Do nothing
+                getline(file,lines);
+                if(lines.find(key_word_2) != std::string::npos){
+                    vector <string> line;
+                    string val;
+                    stringstream ss(lines);
+                    while(getline(ss,val,delimiter)){
+                        line.push_back(val);
+                    }
+                    t += stod(line[1]);
+                }
+                else{}
             }
         }
-        else{
-            //Do nothing
-        }   
+        else{}
     }
+        
     return t;
 }
-int id_generator(string filename,string key){
+
+int id_generator(string filename,string key)
+{
     fstream file(filename);
     string line;
     int counter = 0;
@@ -84,14 +85,12 @@ int id_generator(string filename,string key){
         getline(file,line);
         if(line.find(key) != std::string::npos)
             counter++;
-        else{
-            //Do nothing
-            }
+        else{}
     }
     return counter;
 }
 
-double shopping(map<string,double>product_list){
+double shopping(map<string,double>product_list,string customer_id){
     string end_prompt = "N";
     string product_id;
     vector <string>product;
@@ -117,6 +116,7 @@ double shopping(map<string,double>product_list){
         fstream transaction;
         transaction.open("transaction.txt",ios::app);
         transaction <<"Transaction ID: " << trans_id <<"\n";
+        transaction<< "User ID: " << customer_id <<"\n";
         transaction << "Products: ";
         size_t size = product.size();
         for (int i =0; i < size; i++)
@@ -125,9 +125,7 @@ double shopping(map<string,double>product_list){
         transaction <<"\n\n";
         transaction.close();
     }
-    else{
-        //Do nothing
-    }
+    else{}
     return total;
 }
 
@@ -191,7 +189,16 @@ struct retvalue reward_redeem(int point_rate, map <int , double>reward_map,strin
 {
     double reward = 0;
     double total = read_files("transaction.txt",customer_id, "Total");
-    int points = total / point_rate; //This gives us the no of points accumilated from the given total
+    cout << total<<endl;
+    string substring= "CID";
+    string str = to_string(read_files("customer.txt",customer_id,"total reward points "));
+    size_t token = str.find(substring);
+    if(token != std::string::npos){
+        str.erase(token,substring.length());
+    }
+    else{}
+    int p = stoi(str);
+    int points = (total / point_rate) + p; //This gives us the no of points accumilated from the given total
     for (auto elem : reward_map) {
         if (points >= elem.first) {
             reward = elem.second;

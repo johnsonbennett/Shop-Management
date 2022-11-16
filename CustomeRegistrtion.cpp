@@ -6,10 +6,25 @@
 using namespace std;
 
 
+bool validateUsername(string Name) {
+    int count = 0;
+    for (int i = 0; i <= Name.length(); i++) {
+        if ((isalpha(Name[i])))
+            count++;
+    }
+    if (count < 8) {
+        cout << "input should contain atleast 8 characters in sequence, try again...." << endl;
+        return false;
+    }
+    else
+        return true;
+}
+
+
 bool isValidUserName(string uName) {
     int countAlpha = 0, countDigit = 0;
-    if (uName.length() > 11) {
-        cout << "username must contain only 11 characters, try again......" << endl;
+    if (uName.length() < 11) {
+        cout << "username must contain atleast 11 characters, try again......" << endl;
         return false;
 
     }
@@ -37,7 +52,7 @@ bool isValidUserName(string uName) {
         cout << "username should contain atleast 8 characters followed by atmost 3 numbers" << endl;
         return false;
     }
-    else 
+    else
         return true;
 
 }
@@ -118,7 +133,7 @@ void getName() {
         }
         else {}
     }
-    
+
     for (;;) {
         cout << "First Name: ";
         cin >> firstName;
@@ -155,10 +170,10 @@ void dates()
         ss << dob;
         vector <string>list;
         string token;
-        while(getline(ss,token,'-')) {
+        while (getline(ss, token, '-')) {
             list.push_back(token);
         }
-        
+
         if (list.size() == 3) {
             auto month = stoi(list[0]);
             auto day = stoi(list[1]);
@@ -188,7 +203,7 @@ void cards()
         ss << Carddetails;
         vector <string>list;
         string token;
-        while(getline(ss,token,'-')) {
+        while (getline(ss, token, '-')) {
             list.push_back(token);
         }
 
@@ -202,7 +217,7 @@ void cards()
             else {
                 int points = 0;
                 file << "customer card: " << Carddetails << "\n";
-                file << "total reward points: " << points <<"\n\n";
+                file << "total reward points: " << points << "\n\n";
                 break;
             }
         }
@@ -229,26 +244,26 @@ void show_customer(string id){
     fstream file("customer.txt");
     string lines;
     bool counter = 0;
-    while(!file.eof()){
-        getline(file,lines);
-        if(lines.find(id) != std::string::npos){
-            getline(file,lines);
-            while(lines.find("customer ID") == std::string::npos){
-                cout << lines <<endl;
-                getline(file,lines);
-                if(file.eof())
+    while (!file.eof()) {
+        getline(file, lines);
+        if (lines.find(id) != std::string::npos) {
+            getline(file, lines);
+            while (lines.find("customer ID") == std::string::npos) {
+                cout << lines << endl;
+                getline(file, lines);
+                if (file.eof())
                     break;
-                else{}
-        
+                else {}
+
             }
         }
 
     }
 }
 
-//int main() {
-//    RandomNumber();
-/*  getName();
+/*int main() {
+    RandomNumber();
+ getName();
     dates();
     cards();
     rewards();

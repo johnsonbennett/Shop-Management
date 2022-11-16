@@ -27,8 +27,8 @@ int main()
         switch (i)
         {
         case 1:
-            RandomNumber();
             getName();
+            RandomNumber();
             dates();
             cards();
             
