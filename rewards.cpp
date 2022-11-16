@@ -11,16 +11,16 @@ double point_setup();
 void reward_setup();
 map <int, double> reward_map;
 map <string, double>product_list;
-struct retvalue reward_redeem(int point_rate, map <int , double>reward_map);
+struct retvalue reward_redeem(int point_rate, map <int , double>reward_map,string customer_id);
 map <string,double> product_ready();
 double shopping(map <string,double>product_list);
 double read_files(string file_name,string key_word);
+int id_generator(string filename,string key);
 
 struct retvalue{
         int point;
         double rewards; 
     };
-
 
 map <string, double> product_ready(){ //This function takes products from the file and put it to a map
     string product;
@@ -43,16 +43,21 @@ map <string, double> product_ready(){ //This function takes products from the fi
     product_file.close();
     return product_list;
 }
-
-double read_files(string filename, string key_word){        //This function is used to read line by line looking for a key word
+double read_files(string filename, string key_word_1,string key_word_2){
     fstream file;
     file.open(filename);
     string lines;
     double t =0;
     const char delimiter = ':';
+    string line_2;
+    string key_user;
     while(!file.eof()){
         getline(file,lines);
-        if(lines.find(key_word) != std::string::npos){  //find returns -1 if not found, used it to avoid -1
+        if(lines.find(key_word_1) != std::string::npos){
+            stringstream s(line_2);
+            getline(s,key_user);
+            if(keyuser.find(key_word_2) != std::string::npos)
+            {
             vector <string> line;
             string val;
             stringstream ss(lines);
@@ -60,6 +65,10 @@ double read_files(string filename, string key_word){        //This function is u
                 line.push_back(val);
             }
             t += stod(line[1]);
+            }
+            else{
+                //Do nothing
+            }
         }
         else{
             //Do nothing
@@ -67,8 +76,22 @@ double read_files(string filename, string key_word){        //This function is u
     }
     return t;
 }
+int id_generator(string filename,string key){
+    fstream file(filename);
+    string line;
+    int counter = 0;
+    while(!file.eof()){
+        getline(file,line);
+        if(line.find(key) != std::string::npos)
+            counter++;
+        else{
+            //Do nothing
+            }
+    }
+    return counter;
+}
 
-double shopping(map<string,double>product_list,int trans_id){
+double shopping(map<string,double>product_list){
     string end_prompt = "N";
     string product_id;
     vector <string>product;
@@ -89,6 +112,7 @@ double shopping(map<string,double>product_list,int trans_id){
         cin >> end_prompt;
     }
     if(total > 0){
+        int trans_id = id_generator("transaction.txt", "Transaction ID");
         trans_id++;
         fstream transaction;
         transaction.open("transaction.txt",ios::app);
@@ -163,10 +187,10 @@ void reward_setup()  //Sets up how the reward should be done
 
 //This function does the actual computation of the rewards
 
-struct retvalue reward_redeem(int point_rate, map <int , double>reward_map) //Does the actual reward computation
+struct retvalue reward_redeem(int point_rate, map <int , double>reward_map,string customer_id) //Does the actual reward computation
 {
     double reward = 0;
-    double total = read_files("transaction.txt","Total");
+    double total = read_files("transaction.txt",customer_id, "Total");
     int points = total / point_rate; //This gives us the no of points accumilated from the given total
     for (auto elem : reward_map) {
         if (points >= elem.first) {
@@ -176,6 +200,7 @@ struct retvalue reward_redeem(int point_rate, map <int , double>reward_map) //Do
     
     return retvalue{points,reward};
 }
-   
-        
-        
+//int main(){
+//    product_ready();
+//    double total = shopping(product_list);
+
