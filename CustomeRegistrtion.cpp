@@ -1,6 +1,8 @@
 #include<iostream>
 #include<fstream>
 #include<string>
+#include <vector>
+#include <sstream>
 using namespace std;
 
 bool validateUsername(string Name) {
@@ -45,6 +47,8 @@ bool isValidUserName(string uName) {
     else if (countAlpha == 8 && countDigit == 3)
         return true;
     cout << countDigit << " " << countAlpha;
+
+    return false;
 }
 
 bool ValidLength(string s, int i) {
@@ -66,6 +70,7 @@ bool Allalphabets(string s) {
         }
         else {}
     }
+    return true;
 }
 
 bool isNumeric(string str, int num, int digit, string str1) {
@@ -107,8 +112,7 @@ auto getName() {
         }
         else {}
     }
-
-
+    
     for (;;) {
         cout << "First Name: ";
         cin >> firstName;
@@ -134,35 +138,68 @@ auto getName() {
 
 
 void dates() {
-    string dob, DOB;
+    string dob;
     fstream file("customer.txt", ios::in | ios::out | ios::app);
     for (;;) {
         cout << "enter date (MM-DD-YYYY) : ";
         cin >> dob;
-        DOB = dob;
-        dob.erase(remove(dob.begin(), dob.end(), '-'), dob.end());
-        if (isNumeric(dob, 8, 2, DOB)) {
-            file << "customer DOB: " << DOB << endl;
-            break;
+
+        stringstream ss;
+        ss << dob;
+        vector <string>list;
+        string token;
+        while(getline(ss,token,'-')) {
+            list.push_back(token);
         }
-        else {}
+        
+        if (list.size() == 3) {
+            auto month = stoi(list[0]);
+            auto day = stoi(list[1]);
+            auto year = stoi(list[2]);
+            if (month < 0 || month > 12) continue;
+            else if (day < 0 || day > 31) continue;
+            else if (year < 0) continue;
+            else {
+                file << "customer DOB: " << dob << endl;
+                break;
+            }
+        }
+        else { /*do nothing */ }
     }
     file.close();
 }
 
 void cards()
 {
-    string Carddetails, CD;
+    string Carddetails;
+    fstream file("customer.txt", ios::in | ios::out | ios::app);
     for (;;) {
         cout << "enter Credit Card details (XXXX-XXXX-XXXX) : ";
         cin >> Carddetails;
-        CD = Carddetails;
-        Carddetails.erase(remove(Carddetails.begin(), Carddetails.end(), '-'), Carddetails.end());
-        if (isNumeric(Carddetails, 12, 2, CD)) {
-            break;
+
+        stringstream ss;
+        ss << Carddetails;
+        vector <string>list;
+        string token;
+        while(getline(ss,token,'-')) {
+            list.push_back(token);
         }
-        else {}
+
+        if (list.size() == 3) {
+            auto seg1 = stoi(list[0]);
+            auto seg2 = stoi(list[1]);
+            auto seg3 = stoi(list[2]);
+            if (seg1 < 0 || seg1 > 9999) continue;
+            else if (seg2 < 0 || seg2 > 9999) continue;
+            else if (seg3 < 0 || seg3 > 9999) continue;
+            else {
+                file << "customer card: " << Carddetails << endl;
+                break;
+            }
+        }
+        else { /*do nothing */ }
     }
+    file.close();
 }
 
 void RandomNumber() {
@@ -175,7 +212,7 @@ void RandomNumber() {
     int random = rand();
     random = random + 10000000000;
     // Print the random number
-    file << "customer ID: " << "CID" << random << endl;
+    file << "customer ID: " << random << endl;
     file.close();
 }
 void rewards() {
@@ -186,6 +223,20 @@ void rewards() {
     file << "Customer total reward points: " << rewardpoints << endl;
     file << "              " << endl;
     file.close();
+}
+
+bool find_id(string id){
+    fstream file("customer.txt");
+    string lines;
+    while(!file.eof()){
+        getline(file,lines);
+        if(lines.find(id) != std::string::npos)
+            return 1;
+        else {
+            //Do nothing
+        }
+    }
+    return 0;
 }
 
 int main() {
