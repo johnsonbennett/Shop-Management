@@ -1,6 +1,7 @@
 #include <iostream>
 #include "rewards.cpp"
 #include "ProductProcessing.cpp"
+#include "CustomeRegistrtion.cpp"
 using namespace std;
 
 struct node* head = NULL; //A global variable for the head of the linked list
@@ -43,23 +44,39 @@ int main()
 
         case 5:
         {
-            map <string, double>list = product_ready();
-            double total = shopping(list, trans_id);
+          string customer_id;
+          cout << "Enter user ID: ";
+          cin >> customer_id;
+          if(get_id(customer_id)){
+            map <string,double>list = product_ready();
+            double total = shopping(list);
+            cout << "Your total is $" << total  <<endl;
+          }
+          else{
+            cout << "User ID not found\n";
+          }
         }
         break;
-
-
         case 6:
             // view customer using customer ID code
             break;
 
         case 7:
         {
+          string customer_id;
+          cout << "Enter user ID: ";
+          cin >> customer_id;
+          if(get_id(customer_id)){
             double rate = point_setup();
             reward_setup();
-            auto result = reward_redeem(rate, reward_map);
-            cout << "You have " << result.point << "points \n";
-            cout << "You redeemed $" << result.rewards << endl;
+            auto results =reward_redeem(rate,reward_map);
+            cout << "You have " << results.point <<" points\n";
+            cout << "You redeemed $" << results.rewards<<"\n";
+          }
+          else{
+            cout <<"User ID not found\n";
+          break; 
+          }
         }
         break;
         default:
