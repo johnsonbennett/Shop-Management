@@ -1,70 +1,73 @@
 #include <iostream>
 #include "rewards.cpp"
+#include "ProductProcessing.cpp"
 using namespace std;
+
+struct node* head = NULL; //A global variable for the head of the linked list
 
 int main()
 {
-  int i = 0;
-  while (i >= 0 && i < 8)
-  {
-    cout << "----------------MENU--------------" << endl;
-    cout << "1. Customer Registration" << endl;
-    cout << "2. Customer Removal" << endl;
-    cout << "3. Product Addition" << endl;
-    cout << "4. Product Removal" << endl;
-    cout << "5. Shopping" << endl;
-    cout << "6. View customer using customer ID" << endl;
-    cout << "7. Redeem Rewards" << endl;
-    cout << "8. Exit" << endl;
-    cout << "----------------------------------" << endl;
-    cout << "Enter your choice : ";
-    cin >> i;
-
-    switch (i)
+    int i = 0;
+    while (i >= 0 && i < 8)
     {
-    case 1:
-      // Customer Registration code
-      break;
+        cout << endl << "----------------MENU--------------" << endl;
+        cout << "1. Customer Registration" << endl;
+        cout << "2. Customer Removal" << endl;
+        cout << "3. Product Addition" << endl;
+        cout << "4. Product Removal" << endl;
+        cout << "5. Shopping" << endl;
+        cout << "6. View customer using customer ID" << endl;
+        cout << "7. Redeem Rewards" << endl;
+        cout << "8. Exit" << endl;
+        cout << "----------------------------------" << endl;
+        cout << "Enter your choice : ";
+        cin >> i;
 
-    case 2:
-      // Customer Removal code
-      break;
+        switch (i)
+        {
+        case 1:
+            // Customer Registration code
+            break;
 
-    case 3:
-      // product managemetn
-      break;
+        case 2:
+            // Customer Removal code
+            break;
 
-    case 4:
-      // Product Removal code
-      break;
+        case 3:
+            addItem();
+            break;
 
-    case 5:
-      {
-      map <string,double>list = product_ready();
-      double total = shopping(list,trans_id);
-      }
-      break;
-      
+        case 4:
+            deleteItem();
+            break;
 
-    case 6:
-      // view customer using customer ID code
-      break;
+        case 5:
+        {
+            map <string, double>list = product_ready();
+            double total = shopping(list, trans_id);
+        }
+        break;
 
-    case 7:
-      {
-      double rate = point_setup();
-      reward_setup();
-      auto result = reward_redeem(rate,reward_map);
-      cout << "You have "<< result.point <<"points \n";
-      cout << "You redeemed $" <<result.rewards<<endl;
-      }
-      break;
-    default:
-      cout << "Exiting the application...." << endl;
-      exit(0);
-      break;
+
+        case 6:
+            // view customer using customer ID code
+            break;
+
+        case 7:
+        {
+            double rate = point_setup();
+            reward_setup();
+            auto result = reward_redeem(rate, reward_map);
+            cout << "You have " << result.point << "points \n";
+            cout << "You redeemed $" << result.rewards << endl;
+        }
+        break;
+        default:
+            cout << "Exiting the application...." << endl;
+            exit(0);
+            break;
+        }
     }
-  }
 
-  return 0;
+    return 0;
 }
