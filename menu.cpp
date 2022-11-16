@@ -27,7 +27,11 @@ int main()
         switch (i)
         {
         case 1:
-            // Customer Registration code
+            RandomNumber();
+            getName();
+            dates();
+            cards();
+            
             break;
 
         case 2:
@@ -47,9 +51,9 @@ int main()
           string customer_id;
           cout << "Enter user ID: ";
           cin >> customer_id;
-          if(get_id(customer_id)){
+          if(find_id(customer_id)){
             map <string,double>list = product_ready();
-            double total = shopping(list);
+            double total = shopping(list,customer_id);
             cout << "Your total is $" << total  <<endl;
           }
           else{
@@ -58,18 +62,24 @@ int main()
         }
         break;
         case 6:
-            // view customer using customer ID code
+        {
+            string user_id;
+            cout << "Enter User ID (CID**********): ";
+            cin >> user_id;
+            cout <<"\n";
+            show_customer(user_id);
             break;
+        }
 
         case 7:
         {
           string customer_id;
           cout << "Enter user ID: ";
           cin >> customer_id;
-          if(get_id(customer_id)){
+          if(find_id(customer_id)){
             double rate = point_setup();
             reward_setup();
-            auto results =reward_redeem(rate,reward_map);
+            auto results =reward_redeem(rate,reward_map,customer_id);
             cout << "You have " << results.point <<" points\n";
             cout << "You redeemed $" << results.rewards<<"\n";
           }
