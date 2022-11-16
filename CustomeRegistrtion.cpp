@@ -5,19 +5,6 @@
 #include <sstream>
 using namespace std;
 
-bool validateUsername(string Name) {
-    int count = 0;
-    for (int i = 0; i <= 8; i++) {
-        if ((isalpha(Name[i])))
-            count++;
-    }
-    if (count < 8) {
-        cout << "input should contain sequence of 8 characters" << endl;
-        return false;
-    }
-    else
-        return true;
-}
 
 bool isValidUserName(string uName) {
     int countAlpha = 0, countDigit = 0;
@@ -37,18 +24,15 @@ bool isValidUserName(string uName) {
                 countDigit++;
             else {}
         }
-
     }
 
-    if (!(countAlpha == 8 && countDigit == 3)) {
+    if (!(countAlpha >= 8 && countDigit <= 3)) {
         cout << "username should contain atleast 8 characters followed by 3 numbers" << endl;
         return false;
     }
-    else if (countAlpha == 8 && countDigit == 3)
+    else 
         return true;
-    cout << countDigit << " " << countAlpha;
 
-    return false;
 }
 
 bool ValidLength(string s, int i) {
@@ -106,7 +90,7 @@ auto getName() {
     for (;;) {
         cout << "enter username: ";
         cin >> username;
-        if (isValidUserName(username) && validateUsername(username)) {
+        if (isValidUserName(username)) {
             file << "customer " << "Username : " << username << endl;
             break;
         }
@@ -193,7 +177,9 @@ void cards()
             else if (seg2 < 0 || seg2 > 9999) continue;
             else if (seg3 < 0 || seg3 > 9999) continue;
             else {
-                file << "customer card: " << Carddetails << endl;
+                int points = 0;
+                file << "customer card: " << Carddetails << "\n";
+                file << "total reward points: " << points <<"\n\n";
                 break;
             }
         }
@@ -206,22 +192,13 @@ void RandomNumber() {
     fstream file("customer.txt", ios::in | ios::out | ios::app);
     // ofstream file("customer.txt");
      // Providing a seed value
-    srand((unsigned)time(NULL));
+    srand((signed)time(NULL));
 
     // Get a random number
     int random = rand();
     random = random + 10000000000;
     // Print the random number
-    file << "customer ID: " << random << endl;
-    file.close();
-}
-void rewards() {
-    int rewardpoints;
-    fstream file("customer.txt", ios::in | ios::out | ios::app);
-    cout << "enter reward points:";
-    cin >> rewardpoints;
-    file << "Customer total reward points: " << rewardpoints << endl;
-    file << "              " << endl;
+    file << "customer ID: CID" << random << endl;
     file.close();
 }
 
@@ -239,11 +216,32 @@ bool find_id(string id){
     return 0;
 }
 
-int main() {
-    RandomNumber();
-    getName();
+void show_customer(string id){
+    fstream file("customer.txt");
+    string lines;
+    bool counter = 0;
+    while(!file.eof()){
+        getline(file,lines);
+        if(lines.find(id) != std::string::npos){
+            getline(file,lines);
+            while(lines.find("customer ID") == std::string::npos){
+                cout << lines <<endl;
+                getline(file,lines);
+                if(file.eof())
+                    break;
+                else{}
+        
+            }
+        }
+
+    }
+}
+
+//int main() {
+//    RandomNumber();
+/*  getName();
     dates();
     cards();
     rewards();
     return 0;
-}
+}*/
