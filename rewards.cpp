@@ -98,7 +98,6 @@ double read_files(string filename, string key_word_1,string key_word_2,bool acti
                         t += stod(line[1]);
                     }
                     else{
-                        item_delete("customer.txt",key_word_1,key_word_2);
                         file << "total reward points: " << points <<"\n\n";
                     }                
                 }
@@ -228,7 +227,6 @@ struct retvalue reward_redeem(int point_rate, map <int , double>reward_map,strin
 
     int points = (total / point_rate); //This gives us the no of points accumilated from the given total
     cout << "POINTS = " << points << endl;
-    read_files("customer.txt",customer_id,"total reward points", true,points);
     for (auto elem : reward_map) {
         if (points >= elem.first) {
             reward = elem.second;
