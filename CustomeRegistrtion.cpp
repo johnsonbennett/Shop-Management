@@ -3,6 +3,7 @@
 #include<string>
 #include <vector>
 #include <sstream>
+#include <cstdio>
 using namespace std;
 
 bool isValidUserName(string uName) {
@@ -227,7 +228,7 @@ void RandomNumber() {
     file.close();
 }
 
-void access_customer(string id,string action){
+void access_customer(string id){
     fstream file("customer.txt");
     string lines;
     bool counter = 0;
@@ -236,21 +237,40 @@ void access_customer(string id,string action){
         if (lines.find(id) != std::string::npos) {
             getline(file, lines);
             while (lines.find("customer ID") == std::string::npos) {
-                if(action =="read"){
                     cout << lines<<endl;
                     getline(file,lines);
+                    if(file.eof())
+                        break;
+                    else{}
                 }
-                else if(action == "delete"){
-                    cout << "BEFORE"<<lines;
-                    lines.erase();
-                    cout <<"AFTER: "<< lines;
-                    getline(file,lines);
-                }
-                else{}
-                
-            }
         }
         else{}
     }
 
+}
+
+void customer_delete(string id)
+{
+    fstream file("customer.txt");
+    fstream outfile("temp.txt", ios::in | ios::out | ios::app);
+    string lines;
+    while(!file.eof()){
+        getline(file,lines);
+        if(lines.find(id) != std::string::npos){
+            getline(file,lines);
+            while(lines.find("customer ID") == std::string::npos && !file.eof()){
+                getline(file,lines);
+            }
+        }
+        else{
+            outfile<< lines <<endl;
+        }
+    }
+
+    outfile.close();
+    file.close();
+
+    char new_name[] = "customer.txt";
+    char old_name[] = "temp.txt";
+    int result = rename(old_name,new_name);
 }
