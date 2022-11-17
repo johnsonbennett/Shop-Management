@@ -227,7 +227,7 @@ void RandomNumber() {
     file.close();
 }
 
-void show_customer(string id){
+void access_customer(string id,string action){
     fstream file("customer.txt");
     string lines;
     bool counter = 0;
@@ -236,23 +236,21 @@ void show_customer(string id){
         if (lines.find(id) != std::string::npos) {
             getline(file, lines);
             while (lines.find("customer ID") == std::string::npos) {
-                cout << lines << endl;
-                getline(file, lines);
-                if (file.eof())
-                    break;
-                else {}
-
+                if(action =="read"){
+                    cout << lines<<endl;
+                    getline(file,lines);
+                }
+                else if(action == "delete"){
+                    cout << "BEFORE"<<lines;
+                    lines.erase();
+                    cout <<"AFTER: "<< lines;
+                    getline(file,lines);
+                }
+                else{}
+                
             }
         }
-
+        else{}
     }
-}
 
-/*int main() {
-    RandomNumber();
- getName();
-    dates();
-    cards();
-    rewards();
-    return 0;
-}*/
+}
