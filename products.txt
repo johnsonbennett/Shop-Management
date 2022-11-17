@@ -1,3 +1,14 @@
-P33333/mixer/87/6
-P11111/iceCream/12.99/2
-P22222/cookies/3.78/2
+product 1 P22222
+product 1 salad
+product 1 4.99
+product 1 7
+
+product 2 P33333
+product 2 cutlery
+product 2 0.99
+product 2 400
+
+product 3 P11111
+product 3 coffee
+product 3 3.69
+product 3 6

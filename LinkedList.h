@@ -73,11 +73,16 @@ static void printList(string fileName)
 	ofstream myFile;
 	myFile.open(fileName);
 	struct node* ptr = head;
+	int productCount = 1;
 
 	while (ptr != NULL)
 	{
-		myFile << ptr->id << "/" << ptr->name << "/" << ptr->price << "/" << ptr->onHand << endl;
+		myFile << "product " << productCount << " " << ptr->id << endl;
+		myFile << "product " << productCount << " " << ptr->name << endl;
+		myFile << "product " << productCount << " " << ptr->price << endl;
+		myFile << "product " << productCount << " " << ptr->onHand << endl << endl;
 		ptr = ptr->next;
+		productCount += 1;
 	}
 
 	cout << endl;
