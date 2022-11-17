@@ -120,19 +120,40 @@ static void readProductFile()
 	string name;
 	double price = 0;
 	int onHand = 0;
+	int lineCount = 1;
 	ifstream myFile("products.txt");
 	if (myFile.is_open())
 	{
 		while (getline(myFile, line))
 		{
-			id = line.substr(0,line.find("/"));
-			line = line.substr(line.find("/")+1);
-			name = line.substr(0, line.find("/"));
-			line = line.substr(line.find("/") + 1);
-			price = stod(line.substr(0, line.find("/")));
-			line = line.substr(line.find("/") + 1);
-			onHand = stoi(line);
-			insert(id, name, price, onHand);
+			if(lineCount%5==1){
+				line = line.substr(line.find(" ") + 1);
+				line = line.substr(line.find(" ") + 1);
+				id = line;
+				lineCount++;
+			}
+			else if (lineCount % 5 == 2) {
+				line = line.substr(line.find(" ") + 1);
+				line = line.substr(line.find(" ") + 1);
+				name = line;
+				lineCount++;
+			}
+			else if (lineCount % 5 == 3) {
+				line = line.substr(line.find(" ") + 1);
+				line = line.substr(line.find(" ") + 1);
+				price = stod(line);
+				lineCount++;
+			}
+			else if (lineCount % 5 == 4) {
+				line = line.substr(line.find(" ") + 1);
+				line = line.substr(line.find(" ") + 1);
+				onHand = stoi(line);
+				lineCount++;
+			}
+			else {
+				insert(id, name, price, onHand);
+				lineCount++;
+			}
 		}
 		myFile.close();
 	}
