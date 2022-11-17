@@ -44,7 +44,7 @@ int main()
               cout << "ID not found!\n";
             }
             else{
-              access_customer(id,"delete");
+              customer_delete("customer.txt",id,"customer ID");
               cout <<"User deleted successfully!";
             }
           }
@@ -79,7 +79,7 @@ int main()
             cout << "Enter User ID (CID**********): ";
             cin >> user_id;
             cout <<"\n";
-            access_customer(user_id,"read");
+            access_customer(user_id);
             break;
         }
 
