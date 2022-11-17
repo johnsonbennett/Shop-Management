@@ -35,7 +35,18 @@ int main()
             break;
 
         case 2:
-            // Customer Removal code
+          {
+            string id;
+            cout << "Enter username or ID :";
+            cin >> id;
+            if(!find_id(id)){
+              cout << "ID not found!\n";
+            }
+            else{
+              access_customer(id,"delete");
+              cout <<"User deleted successfully!";
+            }
+          }
             break;
 
         case 3:
@@ -67,7 +78,7 @@ int main()
             cout << "Enter User ID (CID**********): ";
             cin >> user_id;
             cout <<"\n";
-            show_customer(user_id);
+            access_customer(user_id,"read");
             break;
         }
 
