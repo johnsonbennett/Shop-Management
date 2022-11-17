@@ -43,6 +43,35 @@ map <string, double> product_ready(){ //This function takes products from the fi
     product_file.close();
     return product_list;
 }
+
+void item_delete(string filename, string id,string key)
+{
+    fstream file(filename);
+    fstream outfile("temp.txt", ios::in | ios::out | ios::app);
+    string lines;
+    while(!file.eof()){
+        getline(file,lines);
+        if(lines.find(id) != std::string::npos){
+            getline(file,lines);
+            while(lines.find(key) == std::string::npos && !file.eof()){
+                getline(file,lines);
+            }
+        }
+        else{
+            outfile<< lines <<endl;
+        }
+    }
+
+    outfile.close();
+    file.close();
+
+    char new_name[] = "customer.txt";
+    char old_name[] = "temp.txt";
+    int result = rename(old_name,new_name);
+}
+
+
+
 double read_files(string filename, string key_word_1,string key_word_2,bool action,int points){
     fstream file;
     file.open(filename);
@@ -55,24 +84,24 @@ double read_files(string filename, string key_word_1,string key_word_2,bool acti
         getline(file,lines);
         if(lines.find(key_word_1) != std::string::npos){
             getline(file,lines);
-            while(lines.find(key_word_1) != std::string::npos)
+            while(lines.find(key_word_2) == std::string::npos && !file.eof())
             {
                 getline(file,lines);
                 if(lines.find(key_word_2) != std::string::npos){
                     vector <string> line;
                     string val;
                     stringstream ss(lines);
-                    while(getline(ss,val,delimiter)){
-                        line.push_back(val);
-                    }
-                    if(action == 0)
+                    if(!action) {
+                        while(getline(ss,val,delimiter)){
+                            line.push_back(val);
+                        }
                         t += stod(line[1]);
-                    else{
-                        line[1] = points;
-                        lines.erase();
-                        file << "total reward points: " << line[1]<<"\n\n";
-                        }                
                     }
+                    else{
+                        item_delete("customer.txt",key_word_1,key_word_2);
+                        file << "total reward points: " << points <<"\n\n";
+                    }                
+                }
                 else{}
             }
         }
@@ -194,18 +223,12 @@ void reward_setup()  //Sets up how the reward should be done
 struct retvalue reward_redeem(int point_rate, map <int , double>reward_map,string customer_id) //Does the actual reward computation
 {
     double reward = 0;
-    double total = read_files("transaction.txt",customer_id, "Total",0,0);
+    double total = read_files("transaction.txt",customer_id, "Total",false,0);
     cout << total<<endl;
-    string substring= "CID";
-    string str = to_string(read_files("customer.txt",customer_id,"total reward points ",0,0));
-    size_t token = str.find(substring);
-    if(token != std::string::npos){
-        str.erase(token,substring.length());
-    }
-    else{}
-    int p = stoi(str);
-    int points = (total / point_rate) + p; //This gives us the no of points accumilated from the given total
-    read_files("customer.txt",customer_id,"total reward points ",1,points);
+
+    int points = (total / point_rate); //This gives us the no of points accumilated from the given total
+    cout << "POINTS = " << points << endl;
+    read_files("customer.txt",customer_id,"total reward points", true,points);
     for (auto elem : reward_map) {
         if (points >= elem.first) {
             reward = elem.second;
@@ -214,7 +237,6 @@ struct retvalue reward_redeem(int point_rate, map <int , double>reward_map,strin
     
     return retvalue{points,reward};
 }
-//int main(){
-//    product_ready();
-//    double total = shopping(product_list);
+
+
 
