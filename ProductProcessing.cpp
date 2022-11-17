@@ -3,11 +3,16 @@
 
 #include <iostream>
 #include <string>
+#include <fstream>
 #include "LinkedList.h"
 
 using namespace std;
 
 extern struct node* head; //A global variable for the head of the linked list
+
+static void writeFile() {
+	printList("products.txt");
+}
 
 static bool checkID(string id){
 	bool isWrong = false;
@@ -82,6 +87,7 @@ static void addItem() {
 	}
 
 	insert(idEnter, nameEnter, priceEnter, onHandEnter);
+	writeFile();
 
 }
 
@@ -96,16 +102,42 @@ static void deleteItem()
 			return;
 		}
 		else {}
-		bool idCheck = checkID(idEnter);
-		if (idCheck)
+		
+		if (checkID(idEnter))
 		{
 			continue;
 		}
 		else {}
 		check = deleteID(idEnter);
+		writeFile();
 	}
 }
 
+static void readProductFile()
+{
+	string line;
+	string id;
+	string name;
+	double price = 0;
+	int onHand = 0;
+	ifstream myFile("products.txt");
+	if (myFile.is_open())
+	{
+		while (getline(myFile, line))
+		{
+			id = line.substr(0,line.find("/"));
+			line = line.substr(line.find("/")+1);
+			name = line.substr(0, line.find("/"));
+			line = line.substr(line.find("/") + 1);
+			price = stod(line.substr(0, line.find("/")));
+			line = line.substr(line.find("/") + 1);
+			onHand = stoi(line);
+			insert(id, name, price, onHand);
+		}
+		myFile.close();
+	}
 
+	else cout << "Unable to open file";
+}
 
 #endif

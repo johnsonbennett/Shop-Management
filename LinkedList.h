@@ -2,6 +2,7 @@
 #define LINKEDLIST_H
 
 #include <iostream>
+#include <fstream>
 using namespace std;
 
 struct node {
@@ -67,17 +68,20 @@ static bool deleteID(string id) {
 }
 
 //A function to print the linked list
-static void printList()
+static void printList(string fileName)
 {
+	ofstream myFile;
+	myFile.open(fileName);
 	struct node* ptr = head;
 
 	while (ptr != NULL)
 	{
-		cout << ptr->id << " " << ptr->name << " " << ptr->price << " " << ptr->onHand << endl;
+		myFile << ptr->id << "/" << ptr->name << "/" << ptr->price << "/" << ptr->onHand << endl;
 		ptr = ptr->next;
 	}
 
 	cout << endl;
+	myFile.close();
 }
 
 static bool checkUnique(string id)
