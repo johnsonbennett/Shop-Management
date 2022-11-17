@@ -249,16 +249,16 @@ void access_customer(string id){
 
 }
 
-void customer_delete(string id)
+void customer_delete(string filename, string id,string key)
 {
-    fstream file("customer.txt");
+    fstream file(filename);
     fstream outfile("temp.txt", ios::in | ios::out | ios::app);
     string lines;
     while(!file.eof()){
         getline(file,lines);
         if(lines.find(id) != std::string::npos){
             getline(file,lines);
-            while(lines.find("customer ID") == std::string::npos && !file.eof()){
+            while(lines.find(key) == std::string::npos && !file.eof()){
                 getline(file,lines);
             }
         }
