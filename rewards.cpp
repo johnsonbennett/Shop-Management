@@ -43,7 +43,7 @@ map <string, double> product_ready(){ //This function takes products from the fi
     product_file.close();
     return product_list;
 }
-double read_files(string filename, string key_word_1,string key_word_2){
+double read_files(string filename, string key_word_1,string key_word_2,bool action,int points){
     fstream file;
     file.open(filename);
     string lines;
@@ -65,8 +65,14 @@ double read_files(string filename, string key_word_1,string key_word_2){
                     while(getline(ss,val,delimiter)){
                         line.push_back(val);
                     }
-                    t += stod(line[1]);
-                }
+                    if(action == 0)
+                        t += stod(line[1]);
+                    else{
+                        line[1] = points;
+                        lines.erase();
+                        file << "total reward points: " << line[1]<<"\n\n";
+                        }                
+                    }
                 else{}
             }
         }
@@ -188,10 +194,10 @@ void reward_setup()  //Sets up how the reward should be done
 struct retvalue reward_redeem(int point_rate, map <int , double>reward_map,string customer_id) //Does the actual reward computation
 {
     double reward = 0;
-    double total = read_files("transaction.txt",customer_id, "Total");
+    double total = read_files("transaction.txt",customer_id, "Total",0,0);
     cout << total<<endl;
     string substring= "CID";
-    string str = to_string(read_files("customer.txt",customer_id,"total reward points "));
+    string str = to_string(read_files("customer.txt",customer_id,"total reward points ",0,0));
     size_t token = str.find(substring);
     if(token != std::string::npos){
         str.erase(token,substring.length());
@@ -199,6 +205,7 @@ struct retvalue reward_redeem(int point_rate, map <int , double>reward_map,strin
     else{}
     int p = stoi(str);
     int points = (total / point_rate) + p; //This gives us the no of points accumilated from the given total
+    read_files("customer.txt",customer_id,"total reward points ",1,points);
     for (auto elem : reward_map) {
         if (points >= elem.first) {
             reward = elem.second;
